@@ -558,6 +558,11 @@ public class VideoModule implements CameraModule,
                     mActivity.getResources().getString(R.string.pref_video_quality_default));
             mPreferences.edit().putString(CameraSettings.KEY_VIDEO_QUALITY, videoQuality);
         }
+        CameraSettings settings = new CameraSettings(mActivity, mParameters,
+					 mCameraId, CameraHolder.instance().getCameraInfo());
+        if(!settings.getSupport720PVideo()){
+		    videoQuality="4";
+        }
         int quality = Integer.valueOf(videoQuality);
 
         // Set video quality.

@@ -76,6 +76,7 @@ public class CameraSettings {
 
     private final Context mContext;
     private final Parameters mParameters;
+    private static Parameters tempParameters;
     private final CameraInfo[] mCameraInfo;
     private final int mCameraId;
 
@@ -83,6 +84,7 @@ public class CameraSettings {
                           int cameraId, CameraInfo[] cameraInfo) {
         mContext = activity;
         mParameters = parameters;
+        tempParameters=parameters;
         mCameraId = cameraId;
         mCameraInfo = cameraInfo;
     }
@@ -484,14 +486,22 @@ public class CameraSettings {
         initialCameraPictureSize(context, parameters);
         writePreferredCameraId(preferences, currentCameraId);
     }
-
+    
+    public static boolean getSupport720PVideo(){
+        List<Size> size=tempParameters.getSupportedPreviewSizes();
+        for(int i=0;i<size.size();i++){
+            if(size.get(i).height==720&&size.get(i).width==1280)
+                return true;
+	    }
+        return false;
+    }
     private static ArrayList<String> getSupportedVideoQuality(int cameraId) {
         ArrayList<String> supported = new ArrayList<String>();
         // Check for supported quality
         if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_1080P)) {
             supported.add(Integer.toString(CamcorderProfile.QUALITY_1080P));
         }
-        if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_720P)) {
+        if ((CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_720P))&&getSupport720PVideo()) {
             supported.add(Integer.toString(CamcorderProfile.QUALITY_720P));
         }
         if (CamcorderProfile.hasProfile(cameraId, CamcorderProfile.QUALITY_480P)) {
