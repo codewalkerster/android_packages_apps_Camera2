@@ -23,9 +23,10 @@ LOCAL_AAPT_FLAGS := \
 
 LOCAL_PACKAGE_NAME := Camera2
 
-LOCAL_SDK_VERSION := current
+#LOCAL_SDK_VERSION := current
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
+LOCAL_PROGUARD_ENABLED := disabled
 
 # If this is an unbundled build (to install seprately) then include
 # the libraries in the APK, otherwise just put them in /system/lib and
