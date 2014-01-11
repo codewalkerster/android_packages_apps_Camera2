@@ -354,6 +354,11 @@ public class CameraActivity extends Activity
                             mMainHandler.sendEmptyMessageDelayed(HIDE_ACTION_BAR,
                                     SHOW_ACTION_BAR_TIMEOUT_MS);
                         }
+                    }else{
+                        if(!arePreviewControlsVisible()) {
+                           mMainHandler.sendEmptyMessageDelayed(HIDE_ACTION_BAR,1);
+                           setPreviewControlsVisibility(true);
+                        } 
                     }
                 }
 
