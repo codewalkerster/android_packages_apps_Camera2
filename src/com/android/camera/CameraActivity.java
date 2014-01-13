@@ -63,6 +63,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ShareActionProvider;
 
+import com.android.camera.PhotoModule;
 import com.android.camera.app.AppManagerFactory;
 import com.android.camera.app.PlaceholderManager;
 import com.android.camera.app.PanoramaStitchingManager;
@@ -125,7 +126,7 @@ public class CameraActivity extends Activity
 
     private static final int HIDE_ACTION_BAR = 1;
     private static final long SHOW_ACTION_BAR_TIMEOUT_MS = 3000;
-
+    private static final int SWITCH_CAMERA_STATE=2;
     /** Whether onResume should reset the view to the preview. */
     private boolean mResetToPreviewOnResume = true;
 
@@ -191,7 +192,7 @@ public class CameraActivity extends Activity
 
     private Intent mVideoShareIntent;
     private Intent mImageShareIntent;
-
+    private int tempModuleIndex;
     private class MyOrientationEventListener
             extends OrientationEventListener {
         public MyOrientationEventListener(Context context) {
@@ -285,6 +286,15 @@ public class CameraActivity extends Activity
             if (msg.what == HIDE_ACTION_BAR) {
                 removeMessages(HIDE_ACTION_BAR);
                 CameraActivity.this.setSystemBarsVisibility(false);
+            }
+            switch(msg.what){
+                case SWITCH_CAMERA_STATE:{
+                    if(((PhotoModule)mCurrentModule).getCaptureState())
+                        mMainHandler.sendEmptyMessageDelayed(SWITCH_CAMERA_STATE, 20);
+                    else
+                        moduleSelected();
+                    break;
+                }
             }
         }
     }
@@ -1397,15 +1407,14 @@ public class CameraActivity extends Activity
         return mSecureCamera;
     }
 
-    @Override
-    public void onModuleSelected(int moduleIndex) {
-        if (mCurrentModuleIndex == moduleIndex) {
+    public void moduleSelected(){
+        if (mCurrentModuleIndex == tempModuleIndex) {
             return;
         }
 
         CameraHolder.instance().keep();
         closeModule(mCurrentModule);
-        setModuleFromIndex(moduleIndex);
+        setModuleFromIndex(tempModuleIndex);
 
         openModule(mCurrentModule);
         mCurrentModule.onOrientationChanged(mLastRawOrientation);
@@ -1416,7 +1425,20 @@ public class CameraActivity extends Activity
         // Store the module index so we can use it the next time the Camera
         // starts up.
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putInt(CameraSettings.KEY_STARTUP_MODULE_INDEX, moduleIndex).apply();
+        prefs.edit().putInt(CameraSettings.KEY_STARTUP_MODULE_INDEX, tempModuleIndex).apply();
+    }
+
+    @Override
+    public void onModuleSelected(int moduleIndex) {
+        tempModuleIndex=moduleIndex;
+        if(mCurrentModule instanceof PhotoModule){
+            if(((PhotoModule)mCurrentModule).getCaptureState()){
+                mMainHandler.sendEmptyMessageDelayed(SWITCH_CAMERA_STATE, 20); 
+            }else{
+                moduleSelected(); 
+            }
+        }else
+            moduleSelected(); 
     }
 
     /**

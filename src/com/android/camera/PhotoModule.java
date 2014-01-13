@@ -1110,6 +1110,10 @@ public class PhotoModule
         }
     }
 
+    public boolean getCaptureState() {
+        return mCaputreState;
+    }
+
     @Override
     public void onShutterButtonClick() {
         if (mPaused || mUI.collapseCameraControls()
