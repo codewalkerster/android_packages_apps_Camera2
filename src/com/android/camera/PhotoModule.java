@@ -122,7 +122,7 @@ public class PhotoModule
     private int mCameraId;
     private Parameters mParameters;
     private boolean mPaused;
-
+    private boolean mCaputreState=false;
     private PhotoUI mUI;
 
     // The activity is going to switch to the specified camera id. This is
@@ -319,7 +319,11 @@ public class PhotoModule
                 }
 
                 case SWITCH_CAMERA: {
-                    switchCamera();
+                    if(mCaputreState){
+                       mHandler.sendEmptyMessageDelayed(SWITCH_CAMERA, 20);
+                    }else{
+                       switchCamera();
+                    }
                     break;
                 }
 
@@ -685,6 +689,7 @@ public class PhotoModule
         public void onPictureTaken(final byte [] jpegData, CameraProxy camera) {
             mUI.enableShutter(true);
             if (mPaused) {
+                mCaputreState=false;
                 return;
             }
             if (mIsImageCaptureIntent) {
@@ -782,7 +787,7 @@ public class PhotoModule
             // the mean time and fill it, but that could have happened between the
             // shutter press and saving the JPEG too.
             mActivity.updateStorageSpaceAndHint();
-
+            mCaputreState=false;
             long now = System.currentTimeMillis();
             mJpegCallbackFinishTime = now - mJpegPictureCallbackTime;
             Log.v(TAG, "mJpegCallbackFinishTime = "
@@ -795,8 +800,10 @@ public class PhotoModule
         @Override
         public void onAutoFocus(
                 boolean focused, CameraProxy camera) {
-            if (mPaused) return;
-
+            if (mPaused){ 
+                mCaputreState=false;
+                return;
+            }
             mAutoFocusTime = System.currentTimeMillis() - mFocusStartTime;
             Log.v(TAG, "mAutoFocusTime = " + mAutoFocusTime + "ms");
             setCameraState(IDLE);
@@ -1131,7 +1138,7 @@ public class PhotoModule
             mSnapshotOnIdle = true;
             return;
         }
-
+        mCaputreState=true;
         String timer = mPreferences.getString(
                 CameraSettings.KEY_TIMER,
                 mActivity.getString(R.string.pref_camera_timer_default));
@@ -1166,6 +1173,7 @@ public class PhotoModule
     @Override
     public void onResumeBeforeSuper() {
         mPaused = false;
+        mCaputreState=false;
     }
 
     private boolean prepareCamera() {
@@ -1857,7 +1865,10 @@ public class PhotoModule
         // We need to keep a preview frame for the animation before
         // releasing the camera. This will trigger onPreviewTextureCopied.
         //TODO: Need to animate the camera switch
-        switchCamera();
+        if(mCaputreState){
+            mHandler.sendEmptyMessageDelayed(SWITCH_CAMERA, 20);
+        }else
+            switchCamera();
     }
 
     // Preview texture has been copied. Now camera can be released and the
