@@ -552,14 +552,14 @@ public class VideoModule implements CameraModule,
         // We need to convert it to int manually.
         String videoQuality = mPreferences.getString(CameraSettings.KEY_VIDEO_QUALITY,
                         null);
+        CameraSettings settings = new CameraSettings(mActivity, mParameters,
+					 mCameraId, CameraHolder.instance().getCameraInfo());
         if (videoQuality == null) {
             // check for highest quality before setting default value
             videoQuality = CameraSettings.getSupportedHighestVideoQuality(mCameraId,
                     mActivity.getResources().getString(R.string.pref_video_quality_default));
             mPreferences.edit().putString(CameraSettings.KEY_VIDEO_QUALITY, videoQuality);
         }
-        CameraSettings settings = new CameraSettings(mActivity, mParameters,
-					 mCameraId, CameraHolder.instance().getCameraInfo());
         if(!settings.getSupport720PVideo()){
 		    videoQuality="4";
         }
