@@ -33,6 +33,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.LinearLayout;
+import android.hardware.Camera.CameraInfo;
 
 import com.android.camera.util.CameraUtil;
 import com.android.camera.util.GcamHelper;
@@ -52,7 +53,7 @@ public class ModuleSwitcher extends RotateImageView
     public static final int WIDE_ANGLE_PANO_MODULE_INDEX = 2;
     public static final int LIGHTCYCLE_MODULE_INDEX = 3;
     public static final int GCAM_MODULE_INDEX = 4;
-
+    private boolean bFindBackCamera=false;
     private static final int[] DRAW_IDS = {
             R.drawable.ic_switch_camera,
             R.drawable.ic_switch_video,
@@ -95,6 +96,15 @@ public class ModuleSwitcher extends RotateImageView
     }
 
     private void init(Context context) {
+        int camera_num = android.hardware.Camera.getNumberOfCameras();
+        CameraInfo cinfo = new CameraInfo();
+        for (int i = 0; i < camera_num; i++) {
+            android.hardware.Camera.getCameraInfo(i, cinfo);
+            if (cinfo.facing == CameraInfo.CAMERA_FACING_BACK) {
+                bFindBackCamera = true;
+                break;
+            }
+        }
         mItemSize = context.getResources().getDimensionPixelSize(R.dimen.switcher_size);
         setOnClickListener(this);
         mIndicator = context.getResources().getDrawable(R.drawable.ic_switcher_menu_indicator);
@@ -103,22 +113,30 @@ public class ModuleSwitcher extends RotateImageView
 
     public void initializeDrawables(Context context) {
         int numDrawIds = DRAW_IDS.length;
-
+        int[] drawids;
+        int[] moduleids;
         if (!PhotoSphereHelper.hasLightCycleCapture(context)) {
             --numDrawIds;
         }
 
         // Always decrement one because of GCam.
         --numDrawIds;
-
-        int[] drawids = new int[numDrawIds];
-        int[] moduleids = new int[numDrawIds];
+        if(!bFindBackCamera){
+            drawids = new int[numDrawIds-1];
+            moduleids = new int[numDrawIds-1];
+        }else{
+            drawids = new int[numDrawIds];
+            moduleids = new int[numDrawIds];
+        }
         int ix = 0;
         for (int i = 0; i < DRAW_IDS.length; i++) {
             if (i == LIGHTCYCLE_MODULE_INDEX && !PhotoSphereHelper.hasLightCycleCapture(context)) {
                 continue; // not enabled, so don't add to UI
             }
             if (i == GCAM_MODULE_INDEX) {
+                continue; // don't add to UI
+            }
+            if (!bFindBackCamera&&(i ==WIDE_ANGLE_PANO_MODULE_INDEX)) {
                 continue; // don't add to UI
             }
             moduleids[ix] = i;
