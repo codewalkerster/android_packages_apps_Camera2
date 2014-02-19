@@ -1336,6 +1336,8 @@ public class FilmStripView extends ViewGroup implements BottomControlsListener {
             }
         } else {
             final ViewItem currItem = mViewItem[mCurrentItem];
+            if(isCameraPreview())
+                mScale=FULL_SCREEN_SCALE;
             // The normal filmstrip has no translation for the current item. If it has
             // translation before, gradually set it to zero.
             currItem.setTranslationX(
