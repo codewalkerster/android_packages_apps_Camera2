@@ -28,6 +28,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Face;
 import android.os.AsyncTask;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.TextureView;
@@ -218,6 +219,7 @@ public class PhotoUI implements PieListener,
         }
         mCameraControls = (CameraControls) mRootView.findViewById(R.id.camera_controls);
         mAnimationManager = new AnimationManager();
+        shutterButtonRequestFocus();
     }
 
     public void setSurfaceTextureSizeChangedListener(SurfaceTextureSizeChangedListener listener) {
@@ -890,4 +892,16 @@ public class PhotoUI implements PieListener,
         mController.updateCameraOrientation();
     }
 
+    private void shutterButtonRequestFocus(){
+        Log.d(TAG,"shutterButtonRequestFocus()");
+        if(SystemProperties.getBoolean("ro.platform.has.mbxuimode",false)){
+            if(mShutterButton!=null){
+                if (mShutterButton.isInTouchMode()) {
+                    mShutterButton.requestFocusFromTouch();
+                } else {
+                    mShutterButton.requestFocus();
+                }
+            }        
+        }
+    }
 }

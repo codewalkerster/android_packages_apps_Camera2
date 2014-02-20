@@ -25,6 +25,7 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -204,6 +205,7 @@ public class ModuleSwitcher extends RotateImageView
         mNeedsAnimationSetup = true;
         for (int i = mDrawIds.length - 1; i >= 0; i--) {
             RotateImageView item = new RotateImageView(getContext());
+            item.setFocusable(true);
             item.setImageResource(mDrawIds[i]);
             item.setBackgroundResource(R.drawable.bg_pressed);
             final int index = i;
@@ -238,6 +240,9 @@ public class ModuleSwitcher extends RotateImageView
                     break;
                 default:
                     break;
+            }
+            if(i==0){
+                item.requestFocus();
             }
             content.addView(item, new LinearLayout.LayoutParams(mItemSize, mItemSize));
         }
