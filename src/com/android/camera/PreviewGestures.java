@@ -147,7 +147,7 @@ public class PreviewGestures
         // If pie is not open, send touch events to gesture detector and scale
         // listener to recognize the gesture.
         mGestureDetector.onTouchEvent(m);
-        if (mZoom != null) {
+        if (mZoom != null&&m.getPointerCount()>=2) {
             mScale.onTouchEvent(m);
             if (MotionEvent.ACTION_POINTER_DOWN == m.getActionMasked()) {
                 mMode = MODE_ZOOM;
