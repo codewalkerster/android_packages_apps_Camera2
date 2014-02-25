@@ -64,7 +64,7 @@ public class Storage {
     }
 
     public static void writeFile(String path, byte[] jpeg, ExifInterface exif) {
-        if (exif != null) {
+        /*if (exif != null) {
             try {
                 exif.writeExif(jpeg, path);
             } catch (Exception e) {
@@ -73,6 +73,8 @@ public class Storage {
         } else {
             writeFile(path, jpeg);
         }
+        */
+        writeFile(path, jpeg);
     }
 
     public static void writeFile(String path, byte[] data) {
