@@ -307,7 +307,7 @@ public class VideoUI implements PieRenderer.PieListener,
      * Starts a flash animation
      */
     public void animateFlash() {
-        mAnimationManager.startFlashAnimation(mFlashOverlay);
+        //mAnimationManager.startFlashAnimation(mFlashOverlay);
     }
 
     /**
