@@ -20,7 +20,6 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.view.View;
-
 /**
  * Class to handle animations.
  */
@@ -30,14 +29,12 @@ public class AnimationManager {
     public static final float FLASH_ALPHA_START = 0.3f;
     public static final float FLASH_ALPHA_END = 0f;
     public static final int FLASH_DURATION = 300;
-
-    public static final int SHRINK_DURATION = 400;
+    public static final int SHRINK_DURATION = 0;
     public static final int HOLD_DURATION = 2500;
     public static final int SLIDE_DURATION = 1100;
 
     private ObjectAnimator mFlashAnim;
     private AnimatorSet mCaptureAnimator;
-
     /**
      * Starts capture animation.
      * @param view a thumbnail view that shows a picture captured and gets animated
@@ -100,7 +97,7 @@ public class AnimationManager {
             @Override
             public void onAnimationStart(Animator animator) {
                 view.setClickable(false);
-                view.setVisibility(View.VISIBLE);
+                view.setVisibility(View.VISIBLE); 
             }
 
             @Override
