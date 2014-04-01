@@ -20,6 +20,7 @@ import java.util.Locale;
 
 import android.content.res.Resources;
 import android.hardware.Camera.Parameters;
+import android.os.SystemProperties;
 
 import com.android.camera.ui.AbstractSettingPopup;
 import com.android.camera.ui.CountdownTimerPopup;
@@ -39,7 +40,7 @@ public class PhotoMenu extends PieController
     private PhotoUI mUI;
     private AbstractSettingPopup mPopup;
     private CameraActivity mActivity;
-
+    private boolean mBoxMode=false;
     public PhotoMenu(CameraActivity activity, PhotoUI ui, PieRenderer pie) {
         super(activity, pie);
         mUI = ui;
@@ -67,10 +68,13 @@ public class PhotoMenu extends PieController
             mRenderer.addItem(item);
         }
         // Exposure compensation.
-        if (group.findPreference(CameraSettings.KEY_EXPOSURE) != null) {
-            item = makeItem(CameraSettings.KEY_EXPOSURE);
-            item.setLabel(res.getString(R.string.pref_exposure_label));
-            mRenderer.addItem(item);
+        mBoxMode=SystemProperties.getBoolean("ro.platform.has.mbxuimode",false);
+        if(!mBoxMode){
+            if (group.findPreference(CameraSettings.KEY_EXPOSURE) != null) {
+                item = makeItem(CameraSettings.KEY_EXPOSURE);
+                item.setLabel(res.getString(R.string.pref_exposure_label));
+                mRenderer.addItem(item);
+            }
         }
         // More settings.
         PieItem more = makeItem(R.drawable.ic_settings_holo_light);
