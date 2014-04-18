@@ -289,7 +289,8 @@ public class CameraActivity extends Activity
             }
             switch(msg.what){
                 case SWITCH_CAMERA_STATE:{
-                    if(((PhotoModule)mCurrentModule).getCaptureState())
+                    if(((PhotoModule)mCurrentModule).getCaptureState() 
+                    		&& !((PhotoModule)mCurrentModule).isCaptureCountingdown())
                         mMainHandler.sendEmptyMessageDelayed(SWITCH_CAMERA_STATE, 20);
                     else
                         moduleSelected();
@@ -1437,7 +1438,8 @@ public class CameraActivity extends Activity
     public void onModuleSelected(int moduleIndex) {
         tempModuleIndex=moduleIndex;
         if(mCurrentModule instanceof PhotoModule){
-            if(((PhotoModule)mCurrentModule).getCaptureState()){
+            if(((PhotoModule)mCurrentModule).getCaptureState()
+            	&& !((PhotoModule)mCurrentModule).isCaptureCountingdown()){
                 mMainHandler.sendEmptyMessageDelayed(SWITCH_CAMERA_STATE, 20); 
             }else{
                 moduleSelected(); 

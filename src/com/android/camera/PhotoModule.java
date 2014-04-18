@@ -1113,6 +1113,10 @@ public class PhotoModule
     public boolean getCaptureState() {
         return mCaputreState;
     }
+    
+    public boolean isCaptureCountingdown() {
+        return mUI.isCountingDown();
+    }
 
     @Override
     public void onShutterButtonClick() {
@@ -1869,7 +1873,7 @@ public class PhotoModule
         // We need to keep a preview frame for the animation before
         // releasing the camera. This will trigger onPreviewTextureCopied.
         //TODO: Need to animate the camera switch
-        if(mCaputreState){
+        if(mCaputreState && !mUI.isCountingDown()){
             mHandler.sendEmptyMessageDelayed(SWITCH_CAMERA, 20);
         }else
             switchCamera();
