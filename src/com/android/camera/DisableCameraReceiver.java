@@ -203,6 +203,11 @@ public class DisableCameraReceiver extends BroadcastReceiver {
                         disableComponent(mContext, ACTIVITIES[i]);
                     }
                     end = true;
+                    try{
+                        Thread.sleep(500);
+                    }catch (InterruptedException e){
+                    }
+                    android.os.Process.killProcess(android.os.Process.myPid());
                 }
                 else if((mCamNum > 0) && (mCamNum == devNum)){//video device was plugged in when boot 
                     loopCount++;
