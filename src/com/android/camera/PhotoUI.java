@@ -706,6 +706,12 @@ public class PhotoUI implements PieListener,
         }
     }
 
+    public void enableMenuButton(boolean b) {
+	if (mMenuButton != null) {
+	    mMenuButton.setEnabled(b);
+	}
+    }
+
     public void pressShutterButton() {
         if (mShutterButton.isInTouchMode()) {
             mShutterButton.requestFocusFromTouch();

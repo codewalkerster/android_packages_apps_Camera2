@@ -690,6 +690,7 @@ public class PhotoModule
             mUI.enableShutter(true);
             if (mPaused) {
                 mCaputreState=false;
+	    	mUI.enableMenuButton(true);
                 return;
             }
             if (mIsImageCaptureIntent) {
@@ -793,6 +794,7 @@ public class PhotoModule
             Log.v(TAG, "mJpegCallbackFinishTime = "
                     + mJpegCallbackFinishTime + "ms");
             mJpegPictureCallbackTime = 0;
+	    mUI.enableMenuButton(true);
         }
     }
 
@@ -1165,6 +1167,7 @@ public class PhotoModule
         } else {
             mSnapshotOnIdle = false;
             mFocusManager.doSnap();
+	    mUI.enableMenuButton(false);
         }
     }
 
@@ -1556,6 +1559,7 @@ public class PhotoModule
         if (mSnapshotOnIdle) {
             mHandler.post(mDoSnapRunnable);
         }
+	mUI.enableMenuButton(true);
     }
 
     @Override
