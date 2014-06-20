@@ -1607,6 +1607,9 @@ public class VideoModule implements CameraModule,
         mPendingSwitchCameraId = -1;
         setCameraId(mCameraId);
 
+        if (mMediaRecorderRecording) {
+	    stopVideoRecording();
+	}
         closeCamera();
         mUI.collapseCameraControls();
         // Restart the camera and initialize the UI. From onCreate.
