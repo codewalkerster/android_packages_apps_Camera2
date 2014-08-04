@@ -1136,6 +1136,12 @@ public class FilmStripView extends ViewGroup implements BottomControlsListener {
         });
     }
 
+    private void setCurrentViewCenter() {
+        if( mViewItem[mCurrentItem] != null ) {
+            snapInCenter();
+        }
+    }
+
     /**
      * Keep the current item in the center. This functions does not check if
      * the current item is null.
@@ -1740,6 +1746,7 @@ public class FilmStripView extends ViewGroup implements BottomControlsListener {
             @Override
             public void onDataRemoved(int dataID, ImageData data) {
                 animateItemRemoval(dataID, data);
+                setCurrentViewCenter();
             }
         });
     }
