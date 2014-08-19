@@ -817,6 +817,8 @@ public class PhotoUI implements PieListener,
 
     public void removeDisplayChangeListener() {
         ((CameraRootView) mRootView).removeDisplayChangeListener();
+        // HACK: For avoid crash in case of Camera API 1.0 interface
+        mSurfaceTexture = null;
     }
 
     // focus UI implementation
