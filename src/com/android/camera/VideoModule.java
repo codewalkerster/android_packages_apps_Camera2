@@ -103,7 +103,7 @@ public class VideoModule extends CameraModule
     private static final int MSG_SWITCH_CAMERA = 8;
     private static final int MSG_SWITCH_CAMERA_START_ANIMATION = 9;
 
-    private static final long SHUTTER_BUTTON_TIMEOUT = 500L; // 500ms
+    private static final long SHUTTER_BUTTON_TIMEOUT = 1000L; // 1000ms
 
     /**
      * An unpublished intent flag requesting to start recording straight away

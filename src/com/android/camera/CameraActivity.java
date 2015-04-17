@@ -1967,6 +1967,7 @@ public class CameraActivity extends QuickActivity
 
     @Override
     public void onDestroyTasks() {
+        unregisterReceiver(mUsbDeviceReceiver);
         if (mSecureCamera) {
             unregisterReceiver(mShutdownReceiver);
         }
