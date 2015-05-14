@@ -362,13 +362,21 @@ public class CameraSettingsActivity extends FragmentActivity {
 
             String[] entries = new String[selectedSizes.size()];
             String[] entryValues = new String[selectedSizes.size()];
+            String setting = preference.getValue();
+            boolean valuesExist = false;
             for (int i = 0; i < selectedSizes.size(); i++) {
                 Size size = selectedSizes.get(i);
                 entries[i] = getSizeSummaryString(size);
                 entryValues[i] = SettingsUtil.sizeToSetting(size);
+                if (entryValues[i].equals(setting)) {
+                    valuesExist = true;
+                }
             }
             preference.setEntries(entries);
             preference.setEntryValues(entryValues);
+            if (!valuesExist) {
+                preference.setValue(entryValues[0]);
+            }
         }
 
         /**
