@@ -733,8 +733,13 @@ public abstract class LocalMediaData implements LocalData {
                 Log.w(TAG, "failed to retrieve width and height from the media store, defaulting " +
                         " to camera profile");
                 CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
-                width = profile.videoFrameWidth;
-                height = profile.videoFrameHeight;
+                width = (profile == null) ? 0 : profile.videoFrameWidth;
+                height = (profile == null) ? 0 : profile.videoFrameHeight;
+                if (width == 0 || height == 0) {
+                    // Width or height is not available.
+                    Log.e(TAG, "Unable to retrieve dimension of video:" + path);
+                    return null;
+                }
             }
 
             long sizeInBytes = c.getLong(COL_SIZE);
