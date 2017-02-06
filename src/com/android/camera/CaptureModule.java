@@ -388,6 +388,10 @@ public class CaptureModule extends CameraModule implements
     private boolean updateCameraCharacteristics() {
         try {
             CameraId cameraId = mOneCameraManager.findFirstCameraFacing(mCameraFacing);
+            if(cameraId == null) {
+                mCameraFacing = Facing.FRONT;
+                cameraId = mOneCameraManager.findFirstCameraFacing(mCameraFacing);
+            }
             if (cameraId != null && cameraId.getValue() != null) {
                 mCameraCharacteristics = mOneCameraManager.getOneCameraCharacteristics(cameraId);
                 return mCameraCharacteristics != null;
