@@ -1187,7 +1187,12 @@ public class VideoModule extends CameraModule
                 mAppController.getOrientationManager().getDeviceOrientation().getDegrees();
         int rotation = CameraUtil.getImageRotation(
                 sensorOrientation, deviceOrientation, isCameraFrontFacing());
-        mMediaRecorder.setOrientationHint(rotation);
+        //by luobx
+        if (mDisplayRotation == 90) {
+            mMediaRecorder.setOrientationHint(270);
+        } else {
+            mMediaRecorder.setOrientationHint(rotation);
+        }
 
         try {
             mMediaRecorder.prepare();

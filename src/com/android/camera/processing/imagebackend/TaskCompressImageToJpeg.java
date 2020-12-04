@@ -45,6 +45,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+//by luobx
+import com.android.camera.util.CameraUtil;
 
 /**
  * Implements the conversion of a YUV_420_888 image to compressed JPEG byte
@@ -150,7 +152,9 @@ public class TaskCompressImageToJpeg extends TaskJpegEncode {
                     Integer exifPixelXDimension = null;
                     Integer exifPixelYDimension = null;
 
-                    if (compressedData.array() != null) {
+                    //by luobx
+                    int mDisplayRotation = CameraUtil.getDisplayRotation();
+                    if (mDisplayRotation != 90 && compressedData.array() != null) {
                         exifData = Exif.getExif(compressedData.array());
                         Map<Integer, Integer> minimalExifTags = exifGetMinimalTags(exifData);
 

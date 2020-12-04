@@ -47,6 +47,8 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+//by luobx
+import com.android.camera.util.CameraUtil;
 
 /**
  * Wires up the ImageBackend task submission process to save JPEG images. Camera
@@ -132,7 +134,13 @@ public class JpegImageBackendImageSaver implements ImageSaver.Builder {
                 // pass this information onto the UI call, since the rotation is
                 // NOT applied to the bitmap directly.
                 int rotation = Exif.getOrientation(payload.data);
-                mSession.updateCaptureIndicatorThumbnail(bitmap, rotation);
+                //by luobx
+                int mDisplayRotation = CameraUtil.getDisplayRotation();
+                if (mDisplayRotation == 90) {
+                    mSession.updateCaptureIndicatorThumbnail(bitmap, 270);
+                } else {
+                    mSession.updateCaptureIndicatorThumbnail(bitmap, rotation);
+                }
                 // Send image to remote devices
                 mPictureSaverCallback.onRemoteThumbnailAvailable(payload.data);
             }

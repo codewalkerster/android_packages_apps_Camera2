@@ -39,6 +39,10 @@ import java.util.HashSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+//by luobx
+import android.graphics.Matrix;
+import com.android.camera.util.CameraUtil;
+import java.io.ByteArrayOutputStream;
 
 /**
  * The default implementation of the CaptureSession interface. This is the
@@ -303,10 +307,25 @@ public class CaptureSessionImpl implements CaptureSession {
         }
 
         mIsFinished = true;
-        if (mPlaceHolder == null) {
+        //by luobx
+        int mDisplayRotation = CameraUtil.getDisplayRotation();
+        byte[] jpegData;
+        if (mDisplayRotation == 90) {
+            Bitmap bitmap = CameraUtil.makeBitmap(data, width*height);
+            Matrix m = new Matrix();
+            m.postRotate(270);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            jpegData = baos.toByteArray();
+        } else {
+            jpegData = data;
+        }
 
+        if (mPlaceHolder == null) {
             mMediaSaver.addImage(
-                    data, mTitle, mSessionStartMillis, mLocation, width, height,
+                    //data, mTitle, mSessionStartMillis, mLocation, width, height,
+                    jpegData, mTitle, mSessionStartMillis, mLocation, width, height,
                     orientation, exif, new MediaSaver.OnMediaSavedListener() {
                         @Override
                         public void onMediaSaved(Uri uri) {
@@ -320,7 +339,8 @@ public class CaptureSessionImpl implements CaptureSession {
         } else {
             try {
                 mContentUri = mPlaceholderManager.finishPlaceholder(mPlaceHolder, mLocation,
-                        orientation, exif, data, width, height, FilmstripItemData.MIME_TYPE_JPEG);
+                        //orientation, exif, data, width, height, FilmstripItemData.MIME_TYPE_JPEG);
+                        orientation, exif, jpegData, width, height, FilmstripItemData.MIME_TYPE_JPEG);
                 mSessionNotifier.notifyTaskDone(mUri);
                 futureResult.set(Optional.fromNullable(mUri));
 
