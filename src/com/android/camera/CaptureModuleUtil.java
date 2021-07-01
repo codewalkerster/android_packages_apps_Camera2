@@ -65,7 +65,7 @@ public class CaptureModuleUtil {
     public static Size getOptimalPreviewSize(Size[] sizes,
             double targetRatio, Double aspectRatioTolerance) {
         // TODO(andyhuibers): Don't hardcode this but use device's measurements.
-        final int MAX_ASPECT_HEIGHT = 1080;
+        final int MAX_ASPECT_HEIGHT = 3096;
 
         // Count sizes with height <= 1080p to mimic camera1 api behavior.
         int count = 0;

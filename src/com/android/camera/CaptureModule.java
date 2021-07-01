@@ -965,7 +965,7 @@ public class CaptureModule extends CameraModule implements
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                onShutterButtonClick();
+                //onShutterButtonClick();
                 return true;
         }
         return false;
@@ -1383,6 +1383,7 @@ public class CaptureModule extends CameraModule implements
         Size previewBufferSize = mCamera.pickPreviewSize(mPictureSize, mContext);
         mPreviewBufferWidth = previewBufferSize.getWidth();
         mPreviewBufferHeight = previewBufferSize.getHeight();
+        Log.d(TAG,"picturesize:" + mPictureSize + ",previewBuffer:" + mPreviewBufferWidth + "x" + mPreviewBufferHeight);
 
         // Workaround for N4 TextureView/HAL issues b/19271661 for 16:9 preview
         // streams.

@@ -26,6 +26,7 @@ import android.os.Build;
 
 import com.android.camera.async.BufferQueue;
 import com.android.camera.async.Updatable;
+import com.android.camera.debug.Log;
 import com.android.camera.one.v2.autofocus.AETriggerResult;
 import com.android.camera.one.v2.autofocus.AFTriggerResult;
 import com.android.camera.one.v2.camera2proxy.CameraCaptureSessionClosedException;
@@ -53,6 +54,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 class ConvergedImageCaptureCommand implements ImageCaptureCommand {
+    private static final Log.Tag TAG = new Log.Tag("ConvergedImageCaptureCommand");
     private final ManagedImageReader mImageReader;
     private final FrameServer mFrameServer;
     private final RequestBuilder.Factory mScanRequestTemplate;
@@ -153,9 +155,11 @@ class ConvergedImageCaptureCommand implements ImageCaptureCommand {
         try (FrameServer.Session session = mFrameServer.createExclusiveSession()) {
             try (ImageStream imageStream = mImageReader.createPreallocatedStream(mBurst.size())) {
                 if (mWaitForAFConvergence) {
+                    Log.d(TAG, "waitForAFConvergence");
                     waitForAFConvergence(session);
                 }
                 if (mWaitForAEConvergence) {
+                    Log.d(TAG, "waitForAEConvergence");
                     waitForAEConvergence(session);
                 }
                 captureBurst(session, imageStream, imageExposureUpdatable, imageSaver);
@@ -221,6 +225,7 @@ class ConvergedImageCaptureCommand implements ImageCaptureCommand {
             imageExposureUpdatable, ImageSaver imageSaver) throws CameraAccessException,
             InterruptedException, ResourceAcquisitionFailedException,
             CameraCaptureSessionClosedException {
+        Log.d(TAG, "captureBurst size:" + mBurst.size());
         List<Request> burstRequest = new ArrayList<>(mBurst.size());
         List<ListenableFuture<TotalCaptureResultProxy>> metadata = new ArrayList<>(mBurst.size());
         boolean first = true;
