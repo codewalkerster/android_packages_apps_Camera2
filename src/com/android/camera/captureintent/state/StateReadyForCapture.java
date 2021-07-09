@@ -320,7 +320,7 @@ public final class StateReadyForCapture extends StateImpl {
                         });
 
                         OneCamera.Facing cameraFacing =
-                                resourceConstructed.getCameraFacingSetting().getCameraFacing();
+                                resourceConstructed.getCameraFacingSetting().switchCameraFacing();
                         CameraId cameraId =  resourceConstructed.getOneCameraManager()
                               .findFirstCameraFacing(cameraFacing);
                         OneCameraCharacteristics characteristics;

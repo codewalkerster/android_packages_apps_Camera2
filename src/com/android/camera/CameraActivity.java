@@ -542,8 +542,9 @@ public class CameraActivity extends QuickActivity
         if (!mModuleManager.getModuleAgent(mCurrentModeIndex).requestAppForCamera()) {
             // We shouldn't be here. Just close the camera and leave.
             mCameraController.closeCamera(false);
-            throw new IllegalStateException("Camera opened but the module shouldn't be " +
+            Log.e(TAG,"Camera opened but the module shouldn't be " +
                     "requesting");
+            return;
         }
 
         Camera cam = camera.getCamera();
@@ -1017,7 +1018,8 @@ public class CameraActivity extends QuickActivity
                     }
                     Optional<SessionItem> newData = SessionItem.create(getApplicationContext(), uri);
                     if (newData.isPresent()) {
-                        mDataAdapter.addOrUpdate(newData.get());
+                        if (mDataAdapter != null)
+                            mDataAdapter.addOrUpdate(newData.get());
                     }
                 }
 

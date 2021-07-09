@@ -2349,8 +2349,7 @@ public class CameraAppUI implements ModeListView.ModeSwitchListener,
                 buttonManager.hideButton(ButtonManager.BUTTON_CAMERA);
             }
 
-            boolean flashBackCamera = settingsManager.getBoolean(SettingsManager.SCOPE_GLOBAL,
-                    Keys.KEY_FLASH_SUPPORTED_BACK_CAMERA);
+            boolean flashBackCamera = hardwareSpec.isFlashSupported();
             if (bottomBarSpec.hideFlash
                     || !flashBackCamera) {
                 // Hide both flash and torch button in flash disable logic
