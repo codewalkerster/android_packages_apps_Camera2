@@ -73,12 +73,12 @@
       android:title="@string/pref_face_detection_enabled_title" />
 
   <!-- media save path -->
-  <!--<ListPreference
+  <ListPreference
       android:defaultValue="@string/pref_media_save_path_flash"
       android:entries="@array/pref_media_save_path_entries"
       android:entryValues="@array/pref_media_save_path_entryvalues"
       android:key="pref_media_save_path_key"
-      android:title="@string/setting_media_save_path" /> -->
+      android:title="@string/setting_media_save_path" />
 
   <!-- Advanced -->
   <PreferenceScreen
